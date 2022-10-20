@@ -1,0 +1,59 @@
+### 解题思路
+
+这种题就是边界问题非常复杂，难以考虑，必须要细心
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int up=0,down=matrix.size(),left=0,right=matrix.front().size();
+        while(up+1<down)
+        {
+            vector<int> pre,cur;
+            //先记下左边一侧
+            for(int i=down-1;i>=up;--i)
+            pre.emplace_back(matrix[i][left]);
+            //覆盖上边一侧，并记录
+            for(int j=left;j<right;++j)
+            {   
+                cur.emplace_back(matrix[up][j]);
+                matrix[up][j]=pre[j-left];
+            }
+            pre=cur;
+            cur.clear();
+            //覆盖右边一侧，并记录
+            for(int i=up;i<down;++i)
+            {
+                if(i==up)//这样是为了防止覆盖右上角
+                cur.emplace_back(pre.back());
+                else
+                cur.emplace_back(matrix[i][right-1]);
+                matrix[i][right-1]=pre[i-up];
+            }
+            pre=cur;
+            cur.clear();
+            //覆盖下边一侧，并记录
+            for(int j=right-1;j>=left;--j)
+            {
+                if(j==right-1)//这样是为了防止覆盖右下角
+                cur.emplace_back(pre.back());
+                else
+                cur.emplace_back(matrix[down-1][j]);
+                matrix[down-1][j]=pre[right-j-1];
+            }
+            pre=cur;
+            cur.clear();
+            //覆盖左边一侧，无需记录，这也呼应了第一行代码，只记录，而无需覆盖
+            for(int i=down-1;i>=up;--i)
+            matrix[i][left]=pre[down-i-1];
+            //调整边界
+            ++up;--down;++left;--right;
+        }
+    }
+};
+```
+

@@ -1,0 +1,32 @@
+分两步走：
+1.将图像进行一次上下行的像素值进行交换；
+2.对整张图像进行一次转置。
+
+* 
+
+```
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int temp_pixel = 0;
+        int row = matrix.size();
+        int col = matrix[0].size();
+        for(int i=0; i< row/2; ++i){
+            for(int j=0; j<col; ++j){
+                temp_pixel = matrix[i][j];
+                matrix[i][j] = matrix[row-i-1][j];
+                matrix[row-i-1][j] = temp_pixel;
+            }
+        }
+        for(int i=0; i<row; ++i){
+            for(int j=i; j<col; ++j){
+                temp_pixel = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp_pixel;
+            }
+        }
+    }
+};
+
+```
+

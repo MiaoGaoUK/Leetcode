@@ -1,0 +1,52 @@
+### 解题思路
+
+递归 每个K区间反转后 回到反转后的头部
+
+### 代码
+
+* cpp
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+//左闭右开
+ListNode* reverser_list(ListNode* left,ListNode* right){
+   if(left&&left->next==right) return left;
+    ListNode* reverse_head=reverser_list(left->next,right);
+    left->next->next=left;
+    left->next=NULL;
+    return reverse_head;
+
+}
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(!head) return head;
+        ListNode *left,*right;
+        left=right=head;
+        for(int i=0;i<k;++i){
+            if(!right){
+             
+              return head;//不反转
+            } 
+            right=right->next;
+        }
+     
+        //反转这个区间
+        ListNode* reverse_head=reverser_list(left,right);
+        left->next=reverseKGroup(right,k);//最后一组的返回
+        return reverse_head;
+
+    }
+};
+
+```
+

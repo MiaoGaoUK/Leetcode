@@ -1,0 +1,55 @@
+### 解题思路
+
+此处撰写解题思路
+
+### 代码
+
+* cpp
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+// 迭代法
+ListNode* reverseKGroup(ListNode* head, int k) {
+		if (k == 1)
+		return head;
+	int n_node = 0;
+	auto p = head;
+	while (p != nullptr) n_node++, p = p->next;
+
+	int s = 1;
+	ListNode* h = new ListNode();
+	h->next	= head;
+	auto pre = h;    // 记录要翻转的首节点的前驱
+//	auto suc = head; // 记录要翻转的最后一个节点的后驱
+	auto fnode = pre->next; //记录翻转后的最后一个节点
+	while (s < (n_node / k) * k) {
+		if (s % k == 1) {
+			p = pre->next->next;  // 首个节点不需要头插,p指向第2个节点
+			fnode = pre->next;    // 记录翻转后的最后一个节点
+			fnode->next = nullptr;
+			while ((++s) % k != 1) {
+				auto pn = p->next;
+				p->next = pre->next;
+				pre->next = p;
+				p = pn;
+			}
+			pre = fnode;
+			fnode->next = p;
+		}
+	}
+	return h->next;
+}
+};
+```
+

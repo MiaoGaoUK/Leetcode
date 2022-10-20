@@ -1,0 +1,45 @@
+### 解题思路
+
+直接倒叙遍历就能解决的问题不要想的太复杂了,这道题跟[#58最后一个单词的长度](https://leetcode-cn.com/problems/length-of-last-word/)题很像都是倒叙的问题.
+可以先看下我那一题的解答, [58题solution](https://leetcode-cn.com/problems/length-of-last-word/solution/csong-fen-pian-zan-ti-by-xiaohu9527-06o9/).
+这一题我们只需要在上一题的基础上加上一层loop就行了.
+
+*******************************
+
+1. 最外面的while loop用来遍历s
+2. 第二个while loop用来遍历空格
+3. 第三个while loop用来遍历我们的字符
+4. i是宏观的变量,然后每次遍历时要计算字符长度以便截取
+5. 注意截取时是i+1, 因为此时i已经不指向字符了
+6. 最后return ans时注意最后有个多余的空格
+
+********************************
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    string reverseWords(string s) {
+        int i = s.size() - 1;
+        string ans;
+        while(i >= 0)
+        {
+            int c = 0;
+            while(i >= 0 && s[i] == ' ') --i;
+            while(i >= 0 && s[i] != ' ')
+            {
+                --i;
+                ++c;
+            }
+            if(c)
+                ans += s.substr(i+1, c) + " ";
+        }
+
+        return ans.substr(0, ans.size()-1);
+    }
+};
+```
+

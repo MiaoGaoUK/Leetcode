@@ -1,0 +1,70 @@
+> Problem: [151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/description/)
+
+[TOC]
+
+# 思路
+
+> 看答案
+
+# 解题方法
+
+> 官方题解3（C++）
+> 1、首先把字符串首尾的空格清除
+> 2、然后把每个单词压入deque<string>中（deque作stack使用）
+> 3、最后把deque中的单词pop到结果字符串中，如此便完成了反转
+
+# 复杂度
+
+- 时间复杂度:
+
+> O(n)
+
+- 空间复杂度:
+
+> O(n)
+
+# Code
+
+* []
+
+```C++
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        int left=0;
+        int right=s.size()-1;
+        //把头尾两端的空格去除
+        while(left<=right && s[left]==' ') left++;
+        while(left<=right && s[right]==' ') right--;
+
+        deque<string> d;//双端队列，在此当做栈使用
+        string word;
+        while(left<=right)
+        {
+            char c=s[left];
+            if(c!=' ')
+            {
+                word += c;
+            }
+            else if(c == ' ' && word.size())//为什么要满足word.size()不为空，是为了应对单词间有两个及以上空格的情况
+            {
+                d.push_front(move(word));
+                word="";
+            }
+            left++;
+        }
+        d.push_front(move(word));//因为最后一个单词后面已没有空格，故要在此压入deque中
+        
+        string answer;
+        while(!d.empty())
+        {
+            answer += d.front();
+            d.pop_front();
+            if(!d.empty()) answer += ' ';
+        }
+        return answer;
+    }
+};
+```
+

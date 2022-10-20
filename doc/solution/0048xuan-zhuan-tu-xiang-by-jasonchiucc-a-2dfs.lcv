@@ -1,0 +1,52 @@
+### 解题思路
+
+這題很多種解法，這裡採用由外到內旋轉的方式，圖解如下
+
+![圖片-1-2.png](https://pic.leetcode-cn.com/1621005627-KYRwrl-%E5%9C%96%E7%89%87-1-2.png)
+
+![圖片-2-1-1024x530.png](https://pic.leetcode-cn.com/1621005650-ipoirl-%E5%9C%96%E7%89%87-2-1-1024x530.png)
+
+![圖片-3-1024x260.png](https://pic.leetcode-cn.com/1621005662-kyAOrL-%E5%9C%96%E7%89%87-3-1024x260.png)
+
+![圖片-4-1-1024x692.png](https://pic.leetcode-cn.com/1621005729-UoKWiM-%E5%9C%96%E7%89%87-4-1-1024x692.png)
+
+![11.png](https://pic.leetcode-cn.com/1621005745-JIywhK-11.png)
+
+![22-1024x871.png](https://pic.leetcode-cn.com/1621005753-erFCMe-22-1024x871.png)
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    void rotate(vector<vector<int> > &matrix) {
+
+        int Layer   = matrix.size()/2;
+        int Move    = matrix.size();
+
+        /* Top, Left, Bottom, Right */
+        int T = 0;
+        int L = 0;
+        int B = matrix.size()-1;
+        int R = matrix.size()-1;
+        
+        for( int LayerIdx = 0; LayerIdx < Layer; ++LayerIdx )
+        {
+            for(int i = 0; i < (Move-1) ; i++) 
+            {
+                swap( matrix[T][L+i], matrix[T+i][R] );
+                swap( matrix[T][L+i], matrix[B][R-i] );
+                swap( matrix[T][L+i], matrix[B-i][L] );
+            }
+            ++T; 
+            --B; 
+            --R; 
+            ++L;        
+            Move -= 2;
+        }
+    }
+};
+```
+

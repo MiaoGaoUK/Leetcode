@@ -1,0 +1,37 @@
+### 解题思路
+
+思路：二次反转
+亮点：
+1、用空格来标志一个单词的结束
+2、只有两种情况，要么加字母，要么加空格
+3、不用erase(),用l指针和resize来删除末尾多余空格
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    string reverseWords(string s) {
+        reverse(s.begin(),s.end());//先总体反转
+        s.push_back(' ');//用空格来标志一个单词的结束，以便立马进行反转
+        int l;//慢指针
+        int r;//快指针
+        int begin = 0;//标记需要反转的单词的初始字母位置
+        for(l=0,r=0; r<s.size(); r++){  //只有两种情况，要么加字母，要么加空格
+            if(s[r] != ' ') s[l++] = s[r];//加字母
+            if(s[r] == ' ' && s[r+1] != ' ' && s[0] != ' '){    //加空格
+                s[l++] = ' ';
+                reverse(s.begin()+begin, s.begin()+l-1);
+                begin = l;  //更新指针
+            }
+        }
+        //不用erase(),用l指针和resize来删除末尾多余空格
+        while(s[l-1] == ' ') l--;
+        s.resize(l);
+        return s;
+    }
+};
+```
+

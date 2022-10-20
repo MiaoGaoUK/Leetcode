@@ -1,0 +1,59 @@
+### 解题思路
+
+C++矩阵旋转(由外到内)
+1.矩阵阶数为n：
+n为奇数：需转动的层数为 n / 2(最中心的一个元素不用转动)；
+n为偶数：需转动的层数为 n / 2；
+2.交换最外层的每个节点，matrix[0][0] (i = 0 && j = 0)
+与 matrix[0][n - 1]交换： swap(matrix[t][l + j], matrix[t + j][r]);
+与 matrix[n - 1][n - 1]交换： swap(matrix[t][l + j], matrix[b][r - j]);
+与 matrix[n - 1][0]交换： swap(matrix[t][l + j], matrix[b - j][l]);
+3.一层内的所有节点都完成交换后，会往内一层继续交换，故：
+顶层节点索引自增：++t；左侧节点索引自增：++l;
+底层节点索引自减：--b:右侧节点索引自减：--r；
+待交换节点数自减：move -= 2;
+4.继续交换内层的每个节点，直至 i < step (step = len / 2，为待转动的层数)；
+5.退出循环，翻转完成。
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        len = matrix.size();
+        step = len / 2;
+        move = matrix.size();
+        t = 0;
+        b = len - 1;
+        l = 0;
+        r = len - 1;
+        //i为需转动的层数
+        for(int i = 0; i < step; i++){
+            //j为一行内需转动的元素数
+            for(int j = 0; j < move - 1; j++){
+                swap(matrix[t][l + j], matrix[t + j][r]);
+                swap(matrix[t][l + j], matrix[b][r - j]);
+                swap(matrix[t][l + j], matrix[b - j][l]);
+            }
+            ++t;
+            ++l;
+            --r;
+            --b;
+            move -= 2;
+        }
+    }
+
+private:
+    int len;  //矩阵阶数
+    int step;  //需转动的层数
+    int move;  //一层内需转动的元素个数
+    int t;  //顶层元素的索引
+    int b;  //底层元素的索引
+    int l;  //左侧元素的索引
+    int r;  //右侧元素的索引
+};
+```
+
