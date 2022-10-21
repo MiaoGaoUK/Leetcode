@@ -1,0 +1,33 @@
+### 解题思路
+
+- 首先给出相关定义：四个不同的方向、结果数组、ij为具体存值的当前下标（从[0, 0]开始）、direct为方向下标（从下标0开始，即{0, 1}）、val为具体存值的当前值
+- 一次螺旋遍历，分别存储res中每个空位：
+  1. val存入res[i][j]
+  2. val自增
+  3. 判断是否需要更换方向（如果按照原来的方向继续走会越界或者已经有值存进去了（非0值），则需要更换方向，(direct+1)%4）
+  4. 根据当前方向继续走，找到下一个继续存储的位置
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> directions  = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        vector<vector<int>> res(n, vector<int>(n, 0));
+        int i=0, j=0, direct=0, val=1;
+        for(int index=0; index<n*n; index++)
+        {
+            res[i][j] = val;
+            val++;
+            if(i+directions[direct][0]==n || i+directions[direct][0]<0 || j+directions[direct][1]==n || j+directions[direct][1]<0 || res[i+directions[direct][0]][j+directions[direct][1]]!=0)  direct = (direct+1)%4;
+            i = i+directions[direct][0];
+            j = j+directions[direct][1];
+        }
+        return res;
+    }
+};
+```
+
