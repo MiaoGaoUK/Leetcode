@@ -1,0 +1,72 @@
+## 解题思路：简单模拟
+
+①先建议reshape操作是否合理：
+
+* java
+
+```java
+int size = mat.length * mat[0].length;
+        //解决reshape不合理的情况
+        if (size != r * c)
+            return mat;
+```
+
+②将mat所有元素存储到arrayList中：
+
+* java
+
+```java
+ArrayList<Integer> arrayList = new ArrayList<>();
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                arrayList.add(mat[i][j]);
+            }
+        }
+```
+
+③将arrayList中的所有元素存储到新的`res[r][c]`矩阵（二维数组）中：
+
+* java
+
+```java
+int[][] res = new int[r][c];
+        int tag = 0;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                res[i][j] = arrayList.get(tag);
+                tag++;
+            }
+        }
+```
+
+### 完整源码：
+
+* java
+
+```java
+class Solution {
+    public int[][] matrixReshape(int[][] mat, int r, int c) {
+        int size = mat.length * mat[0].length;
+        //解决reshape不合理的情况
+        if (size != r * c)
+            return mat;
+        //将mat中的所有元素存储到arrayList里面
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                arrayList.add(mat[i][j]);
+            }
+        }
+        int[][] res = new int[r][c];
+        int tag = 0;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                res[i][j] = arrayList.get(tag);
+                tag++;
+            }
+        }
+        return res;
+    }
+}
+```
+

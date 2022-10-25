@@ -1,0 +1,35 @@
+* 
+
+```
+class Solution {
+public:
+    vector<vector<int>> matrixReshape(vector<vector<int>>& mat, int r, int c) {
+        vector<vector<int>> ans;
+        int m = mat.size();
+        int n = mat[0].size();
+        int num = m*n;
+        if(num%r!=0||num%c!=0)   //不能重塑的时候  返回原数组
+            return mat;
+        vector<int> temp ;
+        for(int i = 0;i<m;i++)
+        {
+            for(int j = 0;j<n;j++)
+            {
+                temp.push_back(mat[i][j]);  //二维数组元素用一维数组存储
+            }
+        }
+        if(r == 1)          //如果重塑后是1*num 直接复制temp到ans
+        {
+            ans.push_back(temp);
+            return ans;
+        }     
+        for(int i = 0;i<num;i=i+num/r)     //需要重新构造数组，以行序为主
+        {
+            vector<int> temp2(temp.begin()+i,temp.begin()+i+num/r);  //复制数组中的一段数据到另一个数组
+            ans.push_back(temp2);
+        }
+        return ans;
+    }
+};
+```
+

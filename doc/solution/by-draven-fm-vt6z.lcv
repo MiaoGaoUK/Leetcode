@@ -1,0 +1,23 @@
+巧用初中知识，前后补0法
+
+* 
+
+```
+/**
+ * @param {number} numRows
+ * @return {number[][]}
+ */
+var generate = function(numRows) {
+    let array = [[1]];
+    for(let i = 1 ; i < numRows  ; ++i){
+        const temp = [0,...array[i-1],0];
+        const next = []
+        for(let j = 0 ; j < temp.length - 1 ; ++j){
+            next.push(temp[j]+temp[j+1]);
+        }
+        array.push(next);
+    }
+    return array
+};
+```
+
