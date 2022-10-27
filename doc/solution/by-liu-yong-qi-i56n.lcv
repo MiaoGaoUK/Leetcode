@@ -1,0 +1,31 @@
+### 解题思路
+
+![image.png](https://pic.leetcode-cn.com/1661249191-iDgznM-image.png)
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int r[9][9] = {{0}};
+        int c[9][9] = {{0}};
+        int b[3][3][9] = {{{0}}};
+        for(int i=0; i<9; ++i) {
+            for(int j=0; j<9; ++j) {
+                if(board[i][j] != '.') {
+                    int n = board[i][j] - '1';
+                    if(r[i][n] || c[j][n] || b[i/3][j/3][n])
+                        return false;
+                    else r[i][n] = c[j][n] = b[i/3][j/3][n] = 1;
+                }
+            }
+        }
+        return true;
+
+    }
+};
+```
+
