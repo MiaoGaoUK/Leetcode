@@ -1,0 +1,67 @@
+各位题友大家好！ 今天是 **[@负雪明烛](/u/fuxuemingzhu/)** 坚持日更的第 **36** 天。今天力扣上的每日一题是「[303. 区域和检索 - 数组不可变](https://leetcode-cn.com/problems/range-sum-query-immutable/)」。
+
+### 解题思路
+
+### preSum（前缀和）
+
+今天这个题目让我们求一个区间 `[i, j]` 内的和，求区间和可以用 preSum 来做。
+
+preSum 方法能快速计算指定区间段 $i - j$ 的元素之和。它的计算方法是从左向右遍历数组，当遍历到数组的 $i$ 位置时，`preSum` 表示 $i$ 位置左边的元素之和。
+
+假设数组长度为 $N$，我们定义一个长度为 $N+1$ 的 `preSum` 数组，**preSum[i] 表示该元素左边所有元素之和（不包含 i 元素）**。然后遍历一次数组，累加区间 $[0, i)$ 范围内的元素，可以得到 `preSum` 数组。
+
+求 `preSum` 的代码如下：
+
+* []
+
+```Python
+N = len(nums)
+preSum = range(N + 1)
+for i in range(N):
+    preSum[i + 1] = preSum[i] + nums[i]
+print(preSum)
+```
+
+利用 `preSum` 数组，可以在 `O(1)` 的时间内快速求出 `nums`  任意区间 `[i, j]` (两端都包含) 的各元素之和。
+
+**`sum(i, j) = preSum[j + 1] - preSum[i]`**
+
+对于本题，可以在 `NumArray` 类的构造函数的里面，求数组每个位置的 `preSum`；当计算`sumRange(i, j)`的时候直接返回 **`preSum[j + 1] - preSum[i]`** 可以得到区间和。
+
+下面以数组 `[1, 12, -5, -6, 50, 3]` 为例，展示了求 preSum 的过程。
+
+![303，preSum.gif](https://pic.leetcode-cn.com/1614560216-yusrnY-303%EF%BC%8CpreSum.gif)
+
+下面是上面动图对应的 PPT，可以点击逐步观看：
+
+<![303，preSum.001.jpeg](https://pic.leetcode-cn.com/1614560229-kHvmjU-303%EF%BC%8CpreSum.001.jpeg),![303，preSum.002.jpeg](https://pic.leetcode-cn.com/1614560229-ScqDik-303%EF%BC%8CpreSum.002.jpeg),![303，preSum.003.jpeg](https://pic.leetcode-cn.com/1614560229-uJqzuk-303%EF%BC%8CpreSum.003.jpeg),![303，preSum.004.jpeg](https://pic.leetcode-cn.com/1614560229-kOOrQE-303%EF%BC%8CpreSum.004.jpeg),![303，preSum.005.jpeg](https://pic.leetcode-cn.com/1614560229-MhOJKG-303%EF%BC%8CpreSum.005.jpeg),![303，preSum.006.jpeg](https://pic.leetcode-cn.com/1614560229-pZdZPX-303%EF%BC%8CpreSum.006.jpeg)>
+
+### 代码
+
+* python
+
+```python
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        N = len(nums)
+        self.preSum = [0] * (N + 1)
+        for i in range(N):
+            self.preSum[i + 1] = self.preSum[i] + nums[i]
+
+    def sumRange(self, i: int, j: int) -> int:
+        return self.preSum[j + 1] - self.preSum[i]
+```
+
+- 时间复杂度：构造函数的时间复杂度是 $O(N)$, `sumRange` 函数调用的时间复杂度是 $O(1)$
+- 空间复杂度：$O(N)$。
+
+### 刷题心得
+
+preSum 的内容在 1~2 月的每日一题中已经遇到过多次了。大家要理解并记忆呀！
+
+-----
+
+OK，以上就是 [@负雪明烛](https://leetcode-cn.com/u/fuxuemingzhu/) 写的今天题解的全部内容了，如果你觉得有帮助的话，**求赞、求关注、求收藏**。如果有疑问的话，请在下面评论，我会及时解答。
+
+祝大家牛年大吉！AC 多多，Offer 多多！我们明天再见！
