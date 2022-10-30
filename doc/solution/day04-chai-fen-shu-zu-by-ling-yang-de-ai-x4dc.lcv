@@ -1,0 +1,42 @@
+这道题本质上是差分，因为bookings的意思就是[开头，结尾，加的数]，故选用差分来做
+首先定义两个vector，diff用来储存差分数组，res用来返回结果，然后就用差分的套路做即可
+对于每次的数组处理，就给diff的begin位置加座位数，这样相当于给resbegin位置之后加了座位数，给diff的end+1位置减去座位数
+这样就相当于给res的end+1位置之后减去座位数，于是整体相当于给res数组的begin到end位置加上了座位数
+需要注意的是end+1，因为本题要求包括end也加座位，所以需要处理end+1
+最后还原的思路也很简单，看我代码基本就能理解了
+
+* 
+
+```
+class Solution {
+    vector<int> diff;
+    vector<int> res;
+public:
+    vector<int> corpFlightBookings(vector<vector<int>>& bookings, int n) {
+        //初始化diff数组
+        for(int i=0;i<n;++i)
+        {
+            diff.push_back(0);
+        }
+        for(vector<int> v:bookings)
+        {
+            int begin = v[0]-1;
+            int end = v[1]-1;
+            int seat = v[2];
+            //初始化三个参数，记得-1
+            diff[begin]+=seat;
+            if(end+1<n) diff[end+1]-=seat;
+
+        }
+        //还原
+        res.push_back(diff[0]);
+        for(int i=1;i<n;++i)
+        {
+            res.push_back(diff[i]+res[i-1]);
+        }
+        return res;
+    }
+};
+
+```
+

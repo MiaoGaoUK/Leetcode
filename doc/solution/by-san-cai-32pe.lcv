@@ -1,0 +1,33 @@
+### 解题思路
+
+看到是区间问题+变动直接想到差分数组
+1. 这里的的区间是左闭右开, 和常规的差分数组有一点不同
+2. 在最后更新完之后只检查一次是否超额就可以了***
+
+### 代码
+
+* cpp
+
+```cpp
+#include<algorithm>
+using namespace std;
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        //看到是区间修改问题,直接考虑差分数组
+        vector<int> diff(1001,0);
+        for(auto trip:trips){
+            diff[trip[1]] += trip[0];
+            diff[trip[2]] -= trip[0];
+            int sum=0;
+            for(auto value: diff){
+                sum += value;
+                if(sum> capacity) return false;
+            }
+        }
+        return true;
+
+    }
+};
+```
+

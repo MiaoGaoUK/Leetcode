@@ -1,0 +1,31 @@
+### 解题思路
+
+此处撰写解题思路
+
+### 代码
+
+* cpp
+
+```cpp
+#include<iostream>
+using namespace std;
+class Solution {
+public:
+    vector<int> corpFlightBookings(vector<vector<int>>& bookings, int n) {
+        vector<int> diff(n,0); //先初始化来加快速度
+        for(auto arr: bookings){
+            int startIndex = arr[0]-1,endIndex=arr[1]-1,val = arr[2];
+            diff[startIndex] += val;
+            if(endIndex+1 < n) diff[endIndex+1] -=val; 
+        }
+        int sum=0;
+        for(int i=0;i<n;i++){
+            sum+= diff[i];
+            diff[i]= sum;   //这里比较懒, 直接用了diff, 节省了空间
+        }
+        return diff;
+
+    }
+};
+```
+
