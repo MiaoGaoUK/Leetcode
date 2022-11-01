@@ -1,0 +1,102 @@
+### 解题思路
+
+此处撰写解题思路
+此题是二分查找的基础题目
+循环终止条件i>j时
+采用i=mid+1和j=mid-1操作
+其实这里只需要讲特殊情况，只有两位输入的时候
+a b为两位输入的情况
+i=0，j=1
+对于终止条件i大于j
+那么终止的前一次应该是怎么样的呢，一定只有这两种情况，
+i==mid  j
+或者 i==mid==j
+这两种情况
+因为i和j都是mid+1，或者mid-1得到的，所以要使得i>j，那么一定会先出现mid等于i或者j的时候
+那么为什么没有j==mid的情况，因为mid=(i+j)/2，这个除法就决定了，mid只能向i靠近，ij相邻，mid==i不可能等于j
+对于输入数组就是两位的情况，该操作也可以兼容，因为mid等于前一个元素0的位置，是target则返回，不是则有两种情况，一种是j=mid-1，越界，终止，另一种i==j==mid，再行判断，也可以正确处理
+
+ps：如果mid等于target，那么mid一定指向 某个target的下标，如果循环结束，mid不指向target，那么数组中不存在target
+至于为什么，可以自己举例子去看各种情况
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> ans;
+        ans.push_back(-1);
+        ans.push_back(-1);
+        if(nums.size()==0)
+        {
+            return ans;    
+        }
+        int i=0;
+        int j=nums.size()-1;
+        int mid;
+        while(i<=j)
+        {
+            mid=(i+j)/2;
+            if(nums[mid]==target)
+            {
+                break;
+            }
+            else if(nums[mid]<target)
+            {
+                i=mid+1;
+            }
+            else
+            {
+                j=mid-1;
+            }
+        }
+        if(nums[mid]!=target)
+        {
+            return ans;
+        }
+        else
+        {
+            cout<<mid;
+            int k=mid;
+            for(;k>=0;)
+            {
+                if(nums[k]==target)
+                {
+                    k--;
+                }
+                else
+                {
+                    k++;
+                    break;
+                }
+            }
+            if(k==-1)
+            k++;
+            ans[0]=k;
+            for(k=mid;k<nums.size();)
+            {
+                if(nums[k]==target)
+                {
+                    k++;
+                }
+                else
+                {
+                    k--;
+                    break;
+                }
+            }
+            if(k==nums.size())
+            k--;
+            ans[1]=k;
+            return ans;
+        }
+
+
+
+    }
+};
+```
+

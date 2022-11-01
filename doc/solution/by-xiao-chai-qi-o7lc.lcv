@@ -1,0 +1,25 @@
+### 执行结果
+
+- 执行用时：4 ms, 在所有 C++ 提交中击败了93.25%的用户
+- 内存消耗：13.2 MB, 在所有 C++ 提交中击败了80.34%的用户
+- 通过测试用例：88 / 88
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        auto left=find(nums.cbegin(),nums.cend(),target);//寻找左边第一个出现的数    
+        int i=-1,j=-1;//初始化下标为-1
+        if(left!=nums.cend()){//左边找到
+            i=left-nums.cbegin();//迭代器差值求下标
+            j=nums.crend()-1-find(nums.crbegin(),nums.crend(),target);//寻找右边第一个出现的数，迭代器差值求下标
+        }
+        return {i,j};
+    }
+};
+```
+
