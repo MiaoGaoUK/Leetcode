@@ -1,0 +1,41 @@
+**算法思想：**
+1. 首先我们可以显然知道当前根节点为pre[l1],并且它在后序中的位置为post[h2]，因此这里我们需要找到能区分左右子树的节点;
+2. 我们知道左子树的根节点为pre[l1+1]，因此只要找到它在后序中的位置(用index表示)就可以分开左右子树;
+
+- a) 后序遍历中，我们知道 左子树：[l2,index], 右子树：[index+1, h2-1]
+- b) 在前序遍历中，左子树起始位置为l1+1,左子树个数一共有(index - l2+1)个，因此左子树：[l1+1, l1+1 + (index - l2+1)]
+- c) 右子树起始位置为左子树终止位置+1，终止位置为h1，因此右子树：[ h1-r_len+1, h1]
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+public:
+    //l1,h1分别为先序序列的第一个和最后一个结点
+    //l2,h2分别为后序序列的第一个和最后一个结点
+    TreeNode* PrePost(vector<int>& preorder, vector<int>& postorder, int l1, int h1, int l2, int h2){
+        if(l1 > h1){
+            return NULL;
+        }
+        TreeNode *root = new(TreeNode);
+        root->val = preorder[l1];//根节点
+        if(l1==h1){
+            return root;
+        }
+        int index; //左子树的根结点下标在后序中的序号
+        for(index=0;postorder[index]!=preorder[l1+1];index++); //在后序序列中找左子树根结点下标
+        int l_len = index-l2+1; //左子树长度
+        int r_len = h2-1-index; //右子树长度
+
+        root->left = PrePost(preorder, postorder, l1+1, l1+l_len, l2, index); //左子树构建
+        root->right = PrePost(preorder, postorder, h1-r_len+1, h1, index+1, index+r_len); //右子树构建
+        return root;
+    }
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        return PrePost(preorder, postorder, 0, preorder.size()-1, 0, postorder.size()-1);
+    }
+};
+```
+

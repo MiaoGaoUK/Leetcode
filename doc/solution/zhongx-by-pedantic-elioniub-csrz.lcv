@@ -1,0 +1,122 @@
+1. 先序遍历解法
+
+* []
+
+```java
+public class Codec {
+    public String serialize(TreeNode root) {
+        if(root==null) return "null";
+        return root.val+","+serialize(root.left)+","+serialize(root.right);
+    }
+    public TreeNode deserialize(String data) {
+        String[] req=data.split(",");
+        ArrayList<String> r=new ArrayList<>(Arrays.asList(req));
+        return dfsdeserialize(r);     
+    }
+
+    public TreeNode dfsdeserialize(ArrayList<String> r){
+        if("null".equals(r.get(0))){
+            r.remove(0);
+            return null;
+        }
+        TreeNode node=new TreeNode(Integer.valueOf(r.get(0)));
+        r.remove(0);
+        node.left=dfsdeserialize(r);
+        node.right=dfsdeserialize(r);
+        return node;
+    }
+}
+```
+
+2.后序遍历解法
+
+* []
+
+```java
+public class Codec {
+   public String serialize(TreeNode root) {
+       if(root==null) return "null";
+       return serialize(root.left)+","+serialize(root.right)+","+root.val;
+   }
+
+   public TreeNode deserialize(String data) {
+       String[] req=data.split(",");
+       ArrayList<String> r=new ArrayList<>(Arrays.asList(req));
+       return dfsdeserialize(r);     
+   }
+
+   public TreeNode dfsdeserialize(ArrayList<String> r){
+       if("null".equals(r.get(r.size()-1))){
+           r.remove(r.size()-1);
+           return null;
+       }
+       TreeNode node=new TreeNode(Integer.valueOf(r.get(r.size()-1)));
+       r.remove(r.size()-1);
+       node.right=dfsdeserialize(r);
+       node.left=dfsdeserialize(r);
+       return node;
+   }
+}
+```
+
+3.层次遍历解法
+
+* []
+
+```java
+public class Codec {
+   public String serialize(TreeNode root) {
+       if(root==null) return "";
+       ArrayList res=new ArrayList();
+       LinkedList<TreeNode> qu=new LinkedList<>();
+       qu.addFirst(root);
+       while(!qu.isEmpty()){
+           TreeNode node=qu.removeLast();
+           if(node==null){
+               res.add("null");
+               continue;
+           }else{
+               res.add(node.val);
+               qu.addFirst(node.left);
+               qu.addFirst(node.right);
+           }
+       }
+      StringBuilder r=new StringBuilder();
+       for (int i = 0; i < res.size(); i++) {
+           r.append(res.get(i));
+           if(i<res.size()-1) r.append(",");
+       }
+      return r.toString();     
+   }
+
+   public TreeNode deserialize(String data) {
+       if(data.length()==0) return null;
+       String[] req=data.split(",");
+       LinkedList<TreeNode> qu=new LinkedList<>();
+       TreeNode root=new TreeNode(Integer.valueOf(req[0]));
+       qu.addFirst(root);
+       int index=1;
+       while(index<req.length){
+           TreeNode node=qu.removeLast();
+           if(!("null".equals(req[index]))){
+               node.left=new TreeNode(Integer.valueOf(req[index]));
+               qu.addFirst(node.left);
+           }
+           index++;
+           if(!("null".equals(req[index]))){
+               node.right=new TreeNode(Integer.valueOf(req[index]));
+               qu.addFirst(node.right);
+           }
+           index++;
+       }
+       return root;
+   }
+}
+```
+
+4.中序遍历
+之所以全网没有关于中序遍历的解法是因为中序序列化的结果和二叉树的结果不是一一对应的。举一个例子：
+对于序列化[null,2,null,5,null,1,null,6,null,3,null,7,null]所对应的二叉树以下两个均满足。
+![image.png](https://pic.leetcode-cn.com/1655204564-qZCVla-image.png)  
+![image.png](https://pic.leetcode-cn.com/1655204640-cMslRj-image.png)
+

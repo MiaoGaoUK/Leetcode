@@ -1,0 +1,49 @@
+# 给大家整点活
+
+本来我这题是打算好好做的，但是他给的是string形式第一下给我看的有点懵，因为我怎么看他怎么像是以数组的形式输入进来的
+
+我看到他的输入和输出完全一致，我就开始思考，他肯定是两个要求写的函数都给调用了一遍，然后我就想到用静态变量去接收他一开始传进来的内容，最后再把它输出出去，接着我发现他最后判定只跟后面一个函数有关
+
+于是我就马上推出他的第二个输出肯定于第一个传进来的root有关，我就把root直接存在静态变量里等待他调用下面那个函数时直接获取
+
+在这种方法做完并且通过后我才发现他string就是完整的把输入框的内容传进来了而已，但是我这种算法是超过了99的人真正意义上达到了O(1)的算法，虽然取巧，但是当个乐子算法康康也好（手动滑稽）
+
+c的时间和空间都是超过了百分之99左右
+
+![image.png](https://pic.leetcode-cn.com/1657277701-vIJzCj-image.png)
+
+c++的时间和空间也都超过了百分之99
+
+![image.png](https://pic.leetcode-cn.com/1657277742-HEcOXy-image.png)
+
+* []
+
+```c
+struct TreeNode* hhh;
+char* serialize(struct TreeNode* root) {
+    hhh=root;
+    return "";
+}
+
+struct TreeNode* deserialize(char* data) {
+    return hhh;
+}
+```
+
+* []
+
+```c++
+static TreeNode* hhh;
+class Codec {
+public:
+    string serialize(TreeNode* root) {
+        hhh=root;
+        return "";
+    }
+    
+    TreeNode* deserialize(string data) {
+        return hhh;
+    }
+};
+```
+

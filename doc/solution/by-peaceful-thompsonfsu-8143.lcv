@@ -1,0 +1,153 @@
+解题思路：
+
+# 深度优先搜索（前序遍历+递归）
+
+代码：
+
+* 
+
+```
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    void rserialize(TreeNode* root, string& str) {
+        // 前序遍历（中左右，遇到空节点输入None），用逗号隔开
+        if (root == NULL) str += "None,";
+        else {
+            str += to_string(root->val) + ",";
+            rserialize(root->left, str);
+            rserialize(root->right, str);
+        }      
+    }
+    string serialize(TreeNode* root) {
+        string ret;
+        rserialize(root, ret);
+        return ret;
+    }
+
+    // Decodes your encoded data to tree.
+
+    TreeNode* rdeserialize(list<string>& dataArray) {
+        if(dataArray.front() == "None") {
+            dataArray.erase(dataArray.begin());
+            return NULL;
+        }
+        // 前序遍历（中左右）恢复树结构
+        TreeNode* root = new TreeNode(stoi(dataArray.front()));
+        dataArray.erase(dataArray.begin());
+        root->left = rdeserialize(dataArray);
+        root->right = rdeserialize(dataArray);
+        return root;
+    }
+
+    TreeNode* deserialize(string data) {
+        list<string> dataArray;
+        string str;
+        // 添加各节点val
+        // 按引用传递，按值传递会增加耗时
+        for (auto& c : data) {
+            if (c == ',') {
+                // 以逗号作为节点分割
+                dataArray.push_back(str);
+                str.clear();
+            } else {
+                str.push_back(c);
+            }
+        }
+        // 添加尾部节点val
+        if (!str.empty()) {
+            dataArray.push_back(str);
+            str.clear();
+        }
+        return rdeserialize(dataArray);
+    }
+};
+```
+
+时间复杂度n，空间复杂度n。
+
+# 广度优先搜索（层序遍历+迭代）
+
+代码：
+
+* 
+
+```
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        // 层序遍历 BFS
+        string ret;
+        queue<TreeNode*> que;
+        que.emplace(root);
+        while (!que.empty()) {
+            int size = que.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                // 空节点直接加入"None,"
+                if (node == NULL) ret += "None,";
+                else {
+                    // 加入节点val，并依次遍历左右子树
+                    ret += to_string(node->val) + ",";
+                    que.emplace(node->left);
+                    que.emplace(node->right);
+                }
+            }
+        }
+        return ret;        
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if (data.size() == 0) return NULL;
+        list<string> dataArray;
+        string str;
+        for (auto& c : data) {
+            if (c == ',') {
+                dataArray.emplace_back(str);
+                str.clear();
+            } else {
+                str.push_back(c);
+            }
+        }
+        if (str.size() != 0) {
+            dataArray.emplace_back(str);
+            str.clear();
+        }
+        queue<TreeNode*> que;
+        if (dataArray.front() == "None") return NULL;
+        TreeNode* root = new TreeNode(stoi(dataArray.front()));
+        que.emplace(root);
+        dataArray.pop_front();
+        while (!que.empty() && !dataArray.empty()) {
+            int size = que.size();
+            for (int i = 0; i < size && !dataArray.empty(); i++) {
+                TreeNode* cur = que.front(); // 父节点
+                que.pop();
+                // 第一个为左节点
+                if (dataArray.front() != "None") {
+                    TreeNode* node1 = new TreeNode(stoi(dataArray.front()));
+                    cur->left = node1;
+                    que.push(node1);
+                }
+                dataArray.pop_front();
+                
+                // 第二个为右节点
+                if (dataArray.front() != "None") {
+                    TreeNode* node2 = new TreeNode(stoi(dataArray.front()));
+                    cur->right = node2;
+                    que.push(node2);
+                }
+                dataArray.pop_front();
+            }
+        }
+        return root;       
+    }
+};
+```
+
+时间复杂度n，空间复杂度n。

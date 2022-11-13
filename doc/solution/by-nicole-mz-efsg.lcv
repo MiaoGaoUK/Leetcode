@@ -1,0 +1,72 @@
+构造二叉树我们通常使用层序构建，即从root到leaves一层一层构建
+那么我们如何通过前序和后序得到层序？
+前序遍历
+root
+root->left
+root->right
+
+后序遍历
+root->left
+root->right
+root
+相信学过数据结构的同学对于用数组表示二叉树不陌生，本题的输入即利用数组表示二叉树
+我们观察前序遍历不难发现一个规律，root和root->left一定是在遍历调用过程中连续，
+在数组中其存放位置一定为 A[root] A[root->left]
+同理观察后续遍历也有一个类似的性质,root和root->right在调用过程中连续
+其存放位置一定为 A[root->right] A[root]
+
+而层序遍历或者说构建二叉树的过程中，我们只需要知道root root->left root->right
+那么我们根据上述两性质，不难构建二叉树
+需要注意的一点是，避免重复访问同一树结点，所以需要引入一个O(n)空间用来记录该结点是否被访问
+代码中用的flag
+
+* 
+
+```
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* constructFromPrePost(vector<int>& preorder, vector<int>& postorder) {
+        int n = preorder.size();
+        vector<int> pre(n + 1, 0);
+        vector<int> post(n + 1, 0);
+        vector<bool> flag(n + 1, true);
+        for (int i = 0; i < n; ++i) {
+            pre[preorder[i]] = i;
+            post[postorder[i]] = i;
+        }
+        TreeNode *root = new TreeNode(preorder[0]);
+        queue<TreeNode *> s;
+        s.push(root);
+        while (!s.empty()) {
+            TreeNode *cur = s.front();
+            s.pop();
+            flag[cur->val] = false;
+            int pre_idx = pre[cur->val];
+            int post_idx = post[cur->val];
+            if (pre_idx + 1 < n && flag[preorder[pre_idx + 1]]) {
+                cur->left = new TreeNode(preorder[pre_idx + 1]);
+                flag[preorder[pre_idx + 1]] = false;
+                s.push(cur->left);
+            }
+            if (post_idx - 1 >= 0 && flag[postorder[post_idx - 1]]) {
+                cur->right = new TreeNode(postorder[post_idx - 1]);
+                flag[postorder[post_idx - 1]] = false;
+                s.push(cur->right);
+            }
+        }
+        return root;
+    }
+};
+```
+

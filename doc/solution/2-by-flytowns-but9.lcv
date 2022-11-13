@@ -1,0 +1,66 @@
+### 解题思路
+
+preorder traversal
+NULL->#
+左右子树与root 用“ ”隔开
+
+### 代码
+
+* cpp
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // preorder traversal
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root == NULL) return "#";
+        return to_string(root->val) + " " + serialize(root->left) + " " + serialize(root->right);
+    }
+
+    TreeNode* mydeserialize(list<string> & l){ //注意这里要是引用 因为前面的要影响后面的
+        if(l.front() == "#"){
+            l.erase(l.begin());
+            return NULL;
+        }
+        auto x = stoi(l.front().c_str());
+        TreeNode* root = new TreeNode(x);
+        l.erase(l.begin());
+        root->left = mydeserialize(l);
+        root->right = mydeserialize(l);
+        return root;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        cout << data << endl;
+        string tmp;
+        list<string> l;
+        for(char c:data){
+            if(c!=' '){
+                tmp += c;
+            }else{
+                l.emplace_back(tmp);
+                tmp.clear();
+            }
+        }
+        if(tmp!="") l.emplace_back(tmp);
+        return mydeserialize(l);
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
+```
+
