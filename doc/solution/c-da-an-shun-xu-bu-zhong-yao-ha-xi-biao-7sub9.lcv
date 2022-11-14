@@ -1,0 +1,53 @@
+♦️A+♣️4。
+
+要找两个结构和数据上完全的树，首先先***毙掉随便拿出两个根结点然后挨个遍历其子树看结果的\*\*想法。
+
+这个时候可能脑子里就什么都不剩了，这个时候我的建议是睡一觉，梦里啥都有。
+
+既然两个树的结构完全一致（包含其数据），那么我们按照某种统一的规则将一棵树的数据取出来然后形成一个序列之类的东西，这个东西也应该一样。
+
+那么这个时候我们再想想：啥玩意在判相等的时候代码少呢？
+
+那自然是字符串，省力省时间。
+
+那又怎么证明这个字符串之前出现过呢？
+
+哈希表，不理解的话那就是map。
+
+map总用过吧。
+
+我们也不需要对由树产生出的字符串排序，所以就用unordered\_map，省时间。
+
+* cpp
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    unordered_map<string,int> ump;
+    vector<TreeNode*> ans;
+public:
+    string dfs(TreeNode* node){
+        if(node==nullptr) return "";
+        string ss=to_string(node->val)+" "+dfs(node->left)+" "+dfs(node->right);
+        ump[ss]++;
+        if(ump[ss]==2) ans.push_back(node);
+        return ss;
+    }
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        dfs(root);
+        return ans;
+    }
+};
+```
+
