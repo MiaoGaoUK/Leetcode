@@ -13,7 +13,22 @@
  */
 class Solution {
 public:
-    TreeNode* searchBST(TreeNode* root, int val) {
+//    TreeNode* traverse(TreeNode* root, int val){
+//
+//
+//
+//    }
+    TreeNode* searchBST(TreeNode* root, int target) {
+        if (root == nullptr) return nullptr;
+
+        if (root -> val <  target){
+            return searchBST(root->right,  target);
+        }
+
+        if (root -> val >  target){
+            return searchBST(root->left,  target);
+        }
+        return root;
 
     }
 };
