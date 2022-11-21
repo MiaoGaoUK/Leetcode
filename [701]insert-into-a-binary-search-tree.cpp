@@ -14,7 +14,7 @@
 class Solution {
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val) {
-
+        // 递归找到待插入的点，该点应为空，我们创建该节点并返回连接到主树上
         if (root == nullptr) return new TreeNode(val);
         if( root->val < val){
             root->right = insertIntoBST(root->right, val);
