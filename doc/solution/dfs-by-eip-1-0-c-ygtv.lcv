@@ -1,0 +1,22 @@
+so easy
+
+* []
+
+```C++
+class Solution {
+public:
+    void dfs(TreeNode* root,int &sum1){
+        if(root){
+            sum1+=1;
+            dfs(root->left,sum1);
+            dfs(root->right,sum1);
+        }
+    }
+    int countNodes(TreeNode* root) {
+        int sum = 0;
+        dfs(root,sum);
+        return sum;
+    }
+};
+```
+
