@@ -4,8 +4,9 @@ class LRUCache {
     struct ListNode{
         int key, val;
         ListNode *pre, *next;
-        ListNode(): key(0), val(0), pre(0), next(0){}; //冒号在此的作用是？？
-        ListNode(int k, int v): key(k), val(v), pre(0), next(0){};
+        ListNode(): key(0), val(0), pre(0), next(0){}; //无参数的构造函数数组初始化时调用
+        ListNode(int k, int v): key(k), val(v), pre(0), next(0){}; // 初始化列表进行有参构造
+   
     };
 
     ListNode *head, *tail;
