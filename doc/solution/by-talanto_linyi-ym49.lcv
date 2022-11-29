@@ -1,0 +1,74 @@
+双向链表加哈希表
+
+* 
+
+```
+class LRUCache {
+    struct ListNode {
+        int key, val;
+        ListNode *pre, *next;
+        ListNode(): key(0), val(0), pre(0), next(0) {}
+        ListNode(int k, int v): key(k), val(v), pre(0), next(0) {}
+    };
+    ListNode *head, *tail;
+    unordered_map<int, ListNode*> mp;
+    int sz;
+    int cap;
+public:
+    LRUCache(int capacity): cap(capacity), sz(0) {
+        head = new ListNode();
+        tail = new ListNode();
+        head->next = tail;
+        tail->next = head;
+    }
+    
+    int get(int key) {
+        if (mp.count(key) == 0) return -1;
+        ListNode *node = mp[key];
+        moveToHead(node);
+        return node->val;
+    }
+    
+    void put(int key, int value) {
+        if (mp.count(key) == 0) {
+            ListNode *node = new ListNode(key, value);
+            addToHead(node);
+            mp[key] = node;
+            sz++;
+            if (sz > cap) {
+                removeTail();
+                sz--;
+            }
+        } else {
+            ListNode *node = mp[key];
+            node->val = value;
+            moveToHead(node);
+        }
+    }
+
+    void moveToHead(ListNode* node) {
+        node->pre->next = node->next;
+        node->next->pre = node->pre;
+        node->pre = head;
+        node->next = head->next;
+        head->next->pre = node;
+        head->next = node;
+    }
+
+    void addToHead(ListNode* node) {
+        node->pre = head;
+        node->next = head->next;
+        head->next->pre = node;
+        head->next = node;
+    }
+
+    void removeTail() {
+        ListNode *node = tail->pre;
+        node->pre->next = tail;
+        tail->pre = node->pre;
+        mp.erase(node->key);
+        delete node;
+    }
+};
+```
+
